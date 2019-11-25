@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactPlayer from 'react-player'
 
-import PlayerStore from '@features/player/store'
+import { inject } from '@lib/store'
 
-function Player() {
-  const playerStore = new PlayerStore()
+export default inject('playerStore')(Player)
+
+function Player({ playerStore }) {
   const { url, playing } = playerStore.nowPlaying
 
   return (
@@ -22,5 +23,3 @@ function Player() {
     />
   )
 }
-
-export default Player
