@@ -73,6 +73,9 @@ function AlbumDetailPage({ data }) {
           <Box width={1 / 3}>
             <DetailPageHeader data={data} />
           </Box>
+          <Box width={2 / 3}>
+            <SongList tracks={data.tracks} />
+          </Box>
         </Flex>
       )}
     </Fetch>
