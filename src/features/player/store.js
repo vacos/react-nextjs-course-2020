@@ -2,7 +2,7 @@ import { observable, action } from 'mobx'
 export default class PlayerStore {
   @observable
   nowPlaying = {
-    playing: true,
+    playing: false,
     title: 'ไกลแค่ไหน คือ ใกล้',
     subTitle: 'Getsunova',
     image: 'https://i.scdn.co/image/ab67616d0000b273e76e64aa449965dd5e439c53',
