@@ -13,7 +13,7 @@ export function getAlbumById(id, { token }) {
       artist: album.name,
       album: album.artists[0].name,
       image: album.images[0].url,
-      previewUrl: track.href,
+      previewUrl: track.preview_url !== null ? track.preview_url : '',
       durationMs: track.duration_ms,
     }))
     return {
