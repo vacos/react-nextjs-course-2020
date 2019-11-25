@@ -5,6 +5,9 @@ import Link from '@link'
 import { useMember } from '@lib/auth'
 import withPage from '@lib/page/withPage'
 
+import { Fetch } from '@lib/api'
+import * as PlaylistService from '@features/playlist/services'
+
 PlaylistListPage.defaultProps = {
   items: [
     {
@@ -30,31 +33,43 @@ function PlaylistListPage({ items }) {
   }
 
   return (
-    <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
-      {items.map(playlist => (
-        <Box width={1 / 6} px={10} py={10} key={playlist.id}>
-          <article>
-            <Link route="playlist-detail" params={{ id: playlist.id }}>
-              <a>
-                <img src={playlist.images[0].url} />
-              </a>
-            </Link>
-            <h3
-              css={{
-                fontSize: '0.8em',
-                fontWeight: 'bold',
-                lineHeight: '1.5',
-                marginTop: '10px',
-                textAlign: 'center',
-              }}>
-              <Link route="playlist-detail" params={{ id: playlist.id }}>
-                <a>{playlist.name}</a>
-              </Link>
-            </h3>
-          </article>
-        </Box>
-      ))}
-    </Flex>
+    <Fetch
+      service={() =>
+        PlaylistService.getMyPlaylist({
+          token: token,
+        })
+      }>
+      {({ data }) => {
+        items = data.items
+        return (
+          <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
+            {items.map(playlist => (
+              <Box width={1 / 6} px={10} py={10} key={playlist.id}>
+                <article>
+                  <Link route="playlist-detail" params={{ id: playlist.id }}>
+                    <a>
+                      <img src={playlist.images[0].url} />
+                    </a>
+                  </Link>
+                  <h3
+                    css={{
+                      fontSize: '0.8em',
+                      fontWeight: 'bold',
+                      lineHeight: '1.5',
+                      marginTop: '10px',
+                      textAlign: 'center',
+                    }}>
+                    <Link route="playlist-detail" params={{ id: playlist.id }}>
+                      <a>{playlist.name}</a>
+                    </Link>
+                  </h3>
+                </article>
+              </Box>
+            ))}
+          </Flex>
+        )
+      }}
+    </Fetch>
   )
 }
 
