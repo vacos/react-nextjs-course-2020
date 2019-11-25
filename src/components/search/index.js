@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Flex, Box } from '@grid'
 import { useMember } from '@lib/auth'
 import withPage from '@lib/page/withPage'
 import SearchResults from './SearchResults'
+
+import { Fetch } from '@lib/api'
+import * as SearchService from '@features/search/services'
 
 SearchPage.defaultProps = {
   data: {
@@ -35,35 +38,56 @@ SearchPage.defaultProps = {
 
 function SearchPage({ data }) {
   const { token } = useMember()
+  const [keyword, setKeyword] = useState('black pink')
 
   if (token === null) {
     return null
   }
 
-  return (
-    <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
-      <Box width={1}>
-        <input
-          type="text"
-          value="blackpink"
-          placeholder="Search for artists, albums or playlists..."
-          css={{
-            padding: '15px 20px',
-            borderRadius: '40px',
-            border: 'none',
-            width: '500px',
-          }}
-          onChange={() => {}}
-        />
-      </Box>
+  const onHandleChange = function(e) {
+    setKeyword(e.target.value)
+  }
 
-      <SearchResults title="Albums" data={data.albums} route="album-detail" />
-      <SearchResults
-        title="Playlists"
-        data={data.playlists}
-        route="playlist-detail"
-      />
-    </Flex>
+  return (
+    <Fetch
+      service={() =>
+        SearchService.getByKeyword(keyword, {
+          token: token,
+        })
+      }>
+      {({ data }) => {
+        console.log(data)
+        return (
+          <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
+            <Box width={1}>
+              <input
+                type="text"
+                value={keyword}
+                placeholder="Search for artists, albums or playlists..."
+                css={{
+                  padding: '15px 20px',
+                  borderRadius: '40px',
+                  border: 'none',
+                  width: '500px',
+                }}
+                onChange={onHandleChange}
+              />
+            </Box>
+
+            <SearchResults
+              title="Albums"
+              data={data.albums}
+              route="album-detail"
+            />
+            <SearchResults
+              title="Playlists"
+              data={data.playlists}
+              route="playlist-detail"
+            />
+          </Flex>
+        )
+      }}
+    </Fetch>
   )
 }
 
