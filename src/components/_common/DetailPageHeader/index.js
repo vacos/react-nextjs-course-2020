@@ -7,7 +7,7 @@ export default function DetailPageHeader({ data }) {
   return (
     <Flex flexWrap="wrap" css={{ padding: '20px 70px' }}>
       <Box width={1}>
-        <img src={data.image} />
+        <img src={data.images[0].url} />
         <div css={{ textAlign: 'center' }}>
           <h1
             css={{
@@ -17,16 +17,14 @@ export default function DetailPageHeader({ data }) {
               lineHeight: 1.5,
               padding: '8px 0 10px',
             }}>
-            {data.title}
+            {data.name}
           </h1>
-          <p css={{ padding: '0 0 40px', fontSize: '0.8em' }}>
-            {data.subTitle}
-          </p>
+          <p css={{ padding: '0 0 40px', fontSize: '0.8em' }}>{data.label}</p>
           <p>
             <Button>Play</Button>
           </p>
           <p css={{ paddingTop: '15px', fontSize: '0.7em' }}>
-            {data.bottomLine}
+            {data.release_date}
           </p>
         </div>
       </Box>
