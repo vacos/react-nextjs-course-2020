@@ -2,6 +2,9 @@ import React from 'react'
 import { Flex, Box } from '@grid'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import colors from '@features/_ui/colors'
+import { inject } from '@lib/store'
+
+export default inject('playerStore')(ControlPanel)
 
 function ButtonControl({ icon, circle = false, active = false, onClick }) {
   const css = {
@@ -29,7 +32,14 @@ function ButtonControl({ icon, circle = false, active = false, onClick }) {
   )
 }
 
+function onPlaying(playing) {
+  console.log(playing)
+}
+
 function ControlPanel({ playerStore }) {
+  const { playing } = playerStore.nowPlaying
+  console.log(playing)
+
   return (
     <Flex>
       <Box>
@@ -39,7 +49,7 @@ function ControlPanel({ playerStore }) {
         <ButtonControl icon="step-backward" onClick={() => {}} />
       </Box>
       <Box>
-        <ButtonControl icon="play" circle={true} onClick={() => {}} />
+        <ButtonControl icon="play" circle={true} onClick={onPlaying} />
       </Box>
       <Box>
         <ButtonControl icon="step-forward" onClick={() => {}} />
@@ -50,5 +60,3 @@ function ControlPanel({ playerStore }) {
     </Flex>
   )
 }
-
-export default ControlPanel
