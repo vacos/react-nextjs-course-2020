@@ -1,15 +1,16 @@
 import React from 'react'
 import { Flex, Box } from '@grid'
+import { inject } from '@lib/store'
+
+export default inject('playerStore')(ProgressBar)
 
 ProgressBar.defaultProps = {
   timeElapsed: '0:00',
-  progress: 0.2,
+  progress: 0,
   duration: '0:30',
 }
 
-function ProgressBar(props) {
-  const { timeElapsed, progress, duration } = props
-
+function ProgressBar({ playerStore }) {
   return (
     <Flex
       justifyContent="space-between"
@@ -18,7 +19,9 @@ function ProgressBar(props) {
         height: '20px',
         alignItems: 'center',
       }}>
-      <Box css={{ fontSize: '0.7em', padding: '10px' }}>{timeElapsed}</Box>
+      <Box css={{ fontSize: '0.7em', padding: '10px' }}>
+        {playerStore.progressBar.timeElapsed}
+      </Box>
       <Box
         css={{
           flex: 1,
@@ -42,7 +45,7 @@ function ProgressBar(props) {
                 borderRadius: '5px',
               },
             }}
-            value={progress}
+            value={playerStore.progressBar.progress}
             max={1}
           />
           <input
@@ -61,7 +64,7 @@ function ProgressBar(props) {
             min={0}
             max={1}
             step="any"
-            value={progress}
+            value={playerStore.progressBar.progress}
             onClick={() => {}}
             onMouseDown={() => {}}
             onChange={() => {}}
@@ -69,9 +72,9 @@ function ProgressBar(props) {
           />
         </div>
       </Box>
-      <Box css={{ fontSize: '0.7em', padding: '10px' }}>{duration}</Box>
+      <Box css={{ fontSize: '0.7em', padding: '10px' }}>
+        {playerStore.progressBar.duration}
+      </Box>
     </Flex>
   )
 }
-
-export default ProgressBar

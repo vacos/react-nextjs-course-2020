@@ -32,14 +32,7 @@ function ButtonControl({ icon, circle = false, active = false, onClick }) {
   )
 }
 
-function onPlaying(playing) {
-  console.log(playing)
-}
-
 function ControlPanel({ playerStore }) {
-  const { playing } = playerStore.nowPlaying
-  console.log(playing)
-
   return (
     <Flex>
       <Box>
@@ -49,7 +42,13 @@ function ControlPanel({ playerStore }) {
         <ButtonControl icon="step-backward" onClick={() => {}} />
       </Box>
       <Box>
-        <ButtonControl icon="play" circle={true} onClick={onPlaying} />
+        <ButtonControl
+          icon={playerStore.isPlaying ? 'pause' : 'play'}
+          circle={true}
+          onClick={() => {
+            playerStore.togglePlaying()
+          }}
+        />
       </Box>
       <Box>
         <ButtonControl icon="step-forward" onClick={() => {}} />

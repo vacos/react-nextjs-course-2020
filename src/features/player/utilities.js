@@ -1,4 +1,4 @@
-export function convertSecondsToMinutes(totalSeconds) {
+export function convertSecondsToMinutes(totalSeconds = 0) {
   totalSeconds = Math.round(totalSeconds)
   const minutes = Math.floor(totalSeconds / 60)
   const seconds = totalSeconds % 60
