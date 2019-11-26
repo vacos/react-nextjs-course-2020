@@ -21,6 +21,9 @@ export default class PlayerStore {
     duration: '0:30',
   }
 
+  @observable
+  listsQueue = []
+
   @action
   play(track) {
     const { previewUrl, name, artist, image } = track
@@ -44,5 +47,22 @@ export default class PlayerStore {
   onPlayProgressBar({ playedSeconds, played }) {
     this.progressBar.timeElapsed = convertSecondsToMinutes(playedSeconds)
     this.progressBar.progress = played
+  }
+
+  @action
+  onAddQueue(track) {
+    console.log('addQueue', track)
+    let isAdd = true
+
+    this.listsQueue.forEach(list => {
+      if (list.previewUrl === track.previewUrl) {
+        isAdd = false
+      }
+    })
+
+    let newItem = [track]
+    if (isAdd) {
+      this.listsQueue = this.listsQueue.concat(newItem)
+    }
   }
 }

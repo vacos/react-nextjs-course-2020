@@ -7,6 +7,12 @@ import colors from '@features/_ui/colors'
 
 import SongList from '@common/SongList'
 
+import { inject } from '@lib/store'
+
+export default inject('playerStore')(
+  compose(withPage({ restricted: true }))(QueuePage),
+)
+
 QueuePage.defaultProps = {
   tracks: [
     {
@@ -39,7 +45,7 @@ QueuePage.defaultProps = {
   ],
 }
 
-function QueuePage({ tracks }) {
+function QueuePage({ tracks, playerStore }) {
   const { token } = useMember()
 
   if (token === null) {
@@ -59,10 +65,8 @@ function QueuePage({ tracks }) {
         </h1>
       </Box>
       <Box width={1}>
-        <SongList tracks={tracks} />
+        <SongList tracks={playerStore.listsQueue} />
       </Box>
     </Flex>
   )
 }
-
-export default compose(withPage({ restricted: true }))(QueuePage)
