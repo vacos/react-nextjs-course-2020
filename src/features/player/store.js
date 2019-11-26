@@ -10,6 +10,9 @@ export default class PlayerStore {
       'https://p.scdn.co/mp3-preview/f0521c21357ae522872b59cf4dd082ad65880fe8?cid=e4abb1ea8fdf4926a463960abd146fcb',
   }
 
+  @observable
+  isPlaying = false
+
   @action
   play(track) {
     const { previewUrl, name, artist, image } = track
@@ -19,7 +22,13 @@ export default class PlayerStore {
     this.nowPlaying.subTitle = artist
     this.nowPlaying.image = image
     this.nowPlaying.url = previewUrl
+    this.isPlaying = true
+    // console.log('Now Playing:', this.nowPlaying.title)
+  }
 
-    console.log('Now Playing:', this.nowPlaying.title)
+  @action
+  togglePlaying() {
+    this.isPlaying = !this.isPlaying
+    this.nowPlaying.playing = this.isPlaying
   }
 }
