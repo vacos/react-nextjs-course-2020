@@ -38,7 +38,7 @@ SearchPage.defaultProps = {
 
 function SearchPage({ data }) {
   const { token } = useMember()
-  const [keyword, setKeyword] = useState('black pink')
+  const [keyword, setKeyword] = useState('')
 
   if (token === null) {
     return null
@@ -49,31 +49,29 @@ function SearchPage({ data }) {
   }
 
   return (
-    <Fetch
-      service={() =>
-        SearchService.getByKeyword(keyword, {
-          token: token,
-        })
-      }>
-      {({ data }) => {
-        console.log(data)
-        return (
-          <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
-            <Box width={1}>
-              <input
-                type="text"
-                value={keyword}
-                placeholder="Search for artists, albums or playlists..."
-                css={{
-                  padding: '15px 20px',
-                  borderRadius: '40px',
-                  border: 'none',
-                  width: '500px',
-                }}
-                onChange={onHandleChange}
-              />
-            </Box>
-
+    <Flex flexWrap="wrap" css={{ padding: '60px 120px' }}>
+      <Box width={1}>
+        <input
+          type="text"
+          value={keyword}
+          placeholder="Search for artists, albums or playlists..."
+          css={{
+            padding: '15px 20px',
+            borderRadius: '40px',
+            border: 'none',
+            width: '500px',
+          }}
+          onChange={onHandleChange}
+        />
+      </Box>
+      <Fetch
+        service={() =>
+          SearchService.getByKeyword(keyword, {
+            token: token,
+          })
+        }>
+        {({ data }) => (
+          <>
             <SearchResults
               title="Albums"
               data={data.albums}
@@ -84,10 +82,10 @@ function SearchPage({ data }) {
               data={data.playlists}
               route="playlist-detail"
             />
-          </Flex>
-        )
-      }}
-    </Fetch>
+          </>
+        )}
+      </Fetch>
+    </Flex>
   )
 }
 
