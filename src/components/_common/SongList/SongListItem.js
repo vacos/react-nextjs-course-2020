@@ -8,7 +8,7 @@ import { inject } from '@lib/store'
 
 export default inject('playerStore')(SongListItem)
 
-function SongListItem({ track, playerStore }) {
+function SongListItem({ track, playerStore, isQ }) {
   const [hover, setHover] = useState(false)
 
   if (track.previewUrl === null) {
@@ -41,7 +41,7 @@ function SongListItem({ track, playerStore }) {
             }}
             onClick={() => {
               // console.log('Play', track)
-              playerStore.play(track)
+              playerStore.play(track, isQ)
             }}>
             <Icon
               icon={hover ? 'play' : 'music'}

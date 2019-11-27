@@ -8,7 +8,11 @@ export default class PlayerStore {
     image: '',
     url: '',
     durationMs: 0,
+    nowPlaying: false,
   }
+
+  @observable
+  nowMusicOnQueue = 0
 
   @observable
   isPlaying = false
@@ -24,7 +28,14 @@ export default class PlayerStore {
   listsQueue = []
 
   @action
-  play(track) {
+  play(track, isQ) {
+    if (!isQ) {
+      this.listsQueue = []
+      this.nowMusicOnQueue = 0
+    } else {
+      this.nowMusicOnQueue = this.nowMusicOnQueue + 1
+    }
+
     const { previewUrl, name, artist, image, durationMs } = track
 
     this.onAddQueue(track)
@@ -34,7 +45,8 @@ export default class PlayerStore {
     this.nowPlaying.image = image
     this.nowPlaying.url = previewUrl
     this.nowPlaying.durationMs = durationMs
-
+    this.progressBar.duration = '0:30'
+    this.nowPlaying.nowPlaying = true
     this.isPlaying = true
     // console.log('Now Playing:', this.nowPlaying.title)
   }
@@ -67,5 +79,15 @@ export default class PlayerStore {
   }
 
   @action
-  onPlayEnded() {}
+  onPlayEnded() {
+    const nextPlay = this.nowMusicOnQueue + 1
+    const lengthOfList = this.listsQueue.length
+    console.log('nextPlay', nextPlay, 'lengthOfList', lengthOfList)
+
+    if (nextPlay < lengthOfList) {
+      this.play(this.listsQueue[nextPlay], true)
+    } else {
+      this.isPlaying = false
+    }
+  }
 }

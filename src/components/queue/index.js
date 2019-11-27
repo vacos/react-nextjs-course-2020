@@ -65,7 +65,7 @@ function QueuePage({ tracks, playerStore }) {
         </h1>
       </Box>
       <Box width={1}>
-        <SongList tracks={playerStore.listsQueue} />
+        <SongList tracks={playerStore.listsQueue} isQ={true} />
       </Box>
     </Flex>
   )
