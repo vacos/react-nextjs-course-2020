@@ -3,13 +3,19 @@ import { convertSecondsToMinutes } from '@features/player/utilities'
 export default class PlayerStore {
   @observable
   nowPlaying = {
-    playing: false,
-    title: 'Loyal (feat. Drake)',
-    subTitle: 'PARTYNEXTDOOR',
-    image: 'https://i.scdn.co/image/ace9f6f3986fb0eb0d5cddca5f11c0ee3df38675',
-    url:
-      'https://p.scdn.co/mp3-preview/9cd34e105748351edc7aa6deb0e05b3d6ffd4c7f?cid=749acd814ecc4422be3cb0f4b526d957',
+    title: '',
+    subTitle: '',
+    image: '',
+    url: '',
+    durationMs: 0,
+    nowPlaying: false,
   }
+
+  @observable
+  nowMusicOnQueue = 0
+
+  @observable
+  playAutoInQueue = false
 
   @observable
   isPlaying = false
@@ -17,32 +23,112 @@ export default class PlayerStore {
   @observable
   progressBar = {
     timeElapsed: '0:00',
-    progress: 0.2,
-    duration: '0:30',
+    progress: 0,
+    duration: '0:00',
   }
 
-  @action
-  play(track) {
-    const { previewUrl, name, artist, image } = track
+  @observable
+  listsQueue = []
 
-    this.nowPlaying.playing = true
+  @action
+  play(track, isQ, key, nextPlay) {
+    if (key !== 'undefined' && this.playAutoInQueue === false) {
+      this.playAutoInQueue = false
+    }
+
+    if (nextPlay === 'undefined' && this.playAutoInQueue === false) {
+      this.playAutoInQueue = true
+    }
+
+    // console.log('playAutoInQueue', this.playAutoInQueue)
+
+    if (!isQ) {
+      this.listsQueue = []
+      this.nowMusicOnQueue = 0
+    } else {
+      if (this.playAutoInQueue) {
+        if (nextPlay) {
+          this.nowMusicOnQueue = nextPlay
+        } else {
+          this.nowMusicOnQueue = key
+        }
+      } else {
+        this.nowMusicOnQueue = key
+      }
+    }
+
+    // console.log(key, this.nowMusicOnQueue)
+
+    const { previewUrl, name, artist, image, durationMs } = track
+
+    this.onAddQueue(track)
+
     this.nowPlaying.title = name
     this.nowPlaying.subTitle = artist
     this.nowPlaying.image = image
     this.nowPlaying.url = previewUrl
+    this.nowPlaying.durationMs = durationMs
+    this.progressBar.duration = '0:30'
+    this.nowPlaying.nowPlaying = true
     this.isPlaying = true
     // console.log('Now Playing:', this.nowPlaying.title)
   }
 
   @action
   togglePlaying() {
-    this.isPlaying = !this.isPlaying
-    this.nowPlaying.playing = this.isPlaying
+    if (this.listsQueue.length > 0) this.isPlaying = !this.isPlaying
   }
 
   @action
   onPlayProgressBar({ playedSeconds, played }) {
     this.progressBar.timeElapsed = convertSecondsToMinutes(playedSeconds)
     this.progressBar.progress = played
+  }
+
+  @action
+  onAddQueue(track) {
+    let isAdd = true
+
+    this.listsQueue.forEach(list => {
+      if (list.previewUrl === track.previewUrl) {
+        isAdd = false
+      }
+    })
+
+    const newItem = [track]
+    if (isAdd) {
+      this.listsQueue = this.listsQueue.concat(newItem)
+    }
+  }
+
+  @action
+  onPlayEnded() {
+    const nextPlay = this.nowMusicOnQueue + 1
+    this.controllPlay(nextPlay)
+  }
+
+  @action
+  onForward() {
+    const nextPlay = this.nowMusicOnQueue + 1
+    this.controllPlay(nextPlay, true)
+  }
+
+  @action
+  onBackward() {
+    const nextPlay = this.nowMusicOnQueue - 1
+    if (nextPlay >= 0) {
+      this.controllPlay(nextPlay, true)
+    }
+  }
+
+  controllPlay(nextPlay, isClick = false) {
+    const lengthOfList = this.listsQueue.length
+
+    if (nextPlay < lengthOfList) {
+      this.playAutoInQueue = true
+      this.play(this.listsQueue[nextPlay], true, true, nextPlay)
+    } else {
+      if (!isClick) this.isPlaying = false
+    }
   }
 }

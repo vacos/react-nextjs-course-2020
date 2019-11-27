@@ -6,19 +6,19 @@ import { inject } from '@lib/store'
 export default inject('playerStore')(Player)
 
 function Player({ playerStore }) {
-  const { url, playing } = playerStore.nowPlaying
+  const { url } = playerStore.nowPlaying
 
   return (
     <ReactPlayer
       css={{ display: 'none' }}
-      playing={playing}
+      playing={playerStore.isPlaying}
       url={url}
       progressInterval={50}
       volume={0.8}
       muted={false}
       onProgress={data => playerStore.onPlayProgressBar(data)}
       onEnded={() => {
-        console.log('onEnded')
+        playerStore.onPlayEnded()
       }}
     />
   )
