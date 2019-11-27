@@ -3,13 +3,11 @@ import { convertSecondsToMinutes } from '@features/player/utilities'
 export default class PlayerStore {
   @observable
   nowPlaying = {
-    playing: false,
-    title: 'Loyal (feat. Drake)',
-    subTitle: 'PARTYNEXTDOOR',
-    image: 'https://i.scdn.co/image/ace9f6f3986fb0eb0d5cddca5f11c0ee3df38675',
-    url:
-      'https://p.scdn.co/mp3-preview/9cd34e105748351edc7aa6deb0e05b3d6ffd4c7f?cid=749acd814ecc4422be3cb0f4b526d957',
-    durationMs: 197973,
+    title: '',
+    subTitle: '',
+    image: '',
+    url: '',
+    durationMs: 0,
   }
 
   @observable
@@ -19,26 +17,18 @@ export default class PlayerStore {
   progressBar = {
     timeElapsed: '0:00',
     progress: 0,
-    duration: '0:30',
+    duration: '0:00',
   }
 
   @observable
-  listsQueue = [
-    {
-      playing: this.nowPlaying.playing,
-      name: this.nowPlaying.title,
-      artist: this.nowPlaying.subTitle,
-      image: this.nowPlaying.image,
-      previewUrl: this.nowPlaying.url,
-      durationMs: this.nowPlaying.durationMs,
-    },
-  ]
+  listsQueue = []
 
   @action
   play(track) {
     const { previewUrl, name, artist, image, durationMs } = track
 
-    this.nowPlaying.playing = true
+    this.onAddQueue(track)
+
     this.nowPlaying.title = name
     this.nowPlaying.subTitle = artist
     this.nowPlaying.image = image
@@ -51,8 +41,7 @@ export default class PlayerStore {
 
   @action
   togglePlaying() {
-    this.isPlaying = !this.isPlaying
-    this.nowPlaying.playing = this.isPlaying
+    if (this.listsQueue.length > 0) this.isPlaying = !this.isPlaying
   }
 
   @action
@@ -63,7 +52,6 @@ export default class PlayerStore {
 
   @action
   onAddQueue(track) {
-    console.log('addQueue', track)
     let isAdd = true
 
     this.listsQueue.forEach(list => {
@@ -72,9 +60,12 @@ export default class PlayerStore {
       }
     })
 
-    let newItem = [track]
+    const newItem = [track]
     if (isAdd) {
       this.listsQueue = this.listsQueue.concat(newItem)
     }
   }
+
+  @action
+  onPlayEnded() {}
 }
