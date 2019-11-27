@@ -40,7 +40,7 @@ function SongListItem({ track, playerStore }) {
               cursor: 'pointer',
             }}
             onClick={() => {
-              console.log('Play', track)
+              // console.log('Play', track)
               playerStore.play(track)
             }}>
             <Icon

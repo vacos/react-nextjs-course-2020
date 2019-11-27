@@ -9,6 +9,7 @@ export default class PlayerStore {
     image: 'https://i.scdn.co/image/ace9f6f3986fb0eb0d5cddca5f11c0ee3df38675',
     url:
       'https://p.scdn.co/mp3-preview/9cd34e105748351edc7aa6deb0e05b3d6ffd4c7f?cid=749acd814ecc4422be3cb0f4b526d957',
+    durationMs: 197973,
   }
 
   @observable
@@ -22,17 +23,28 @@ export default class PlayerStore {
   }
 
   @observable
-  listsQueue = []
+  listsQueue = [
+    {
+      playing: this.nowPlaying.playing,
+      name: this.nowPlaying.title,
+      artist: this.nowPlaying.subTitle,
+      image: this.nowPlaying.image,
+      previewUrl: this.nowPlaying.url,
+      durationMs: this.nowPlaying.durationMs,
+    },
+  ]
 
   @action
   play(track) {
-    const { previewUrl, name, artist, image } = track
+    const { previewUrl, name, artist, image, durationMs } = track
 
     this.nowPlaying.playing = true
     this.nowPlaying.title = name
     this.nowPlaying.subTitle = artist
     this.nowPlaying.image = image
     this.nowPlaying.url = previewUrl
+    this.nowPlaying.durationMs = durationMs
+
     this.isPlaying = true
     // console.log('Now Playing:', this.nowPlaying.title)
   }
