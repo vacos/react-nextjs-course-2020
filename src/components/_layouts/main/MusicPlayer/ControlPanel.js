@@ -39,7 +39,12 @@ function ControlPanel({ playerStore }) {
         <ButtonControl icon="random" active={false} onClick={() => {}} />
       </Box>
       <Box>
-        <ButtonControl icon="step-backward" onClick={() => {}} />
+        <ButtonControl
+          icon="step-backward"
+          onClick={() => {
+            playerStore.onBackward()
+          }}
+        />
       </Box>
       <Box>
         <ButtonControl
@@ -51,7 +56,12 @@ function ControlPanel({ playerStore }) {
         />
       </Box>
       <Box>
-        <ButtonControl icon="step-forward" onClick={() => {}} />
+        <ButtonControl
+          icon="step-forward"
+          onClick={() => {
+            playerStore.onForward()
+          }}
+        />
       </Box>
       <Box>
         <ButtonControl icon="redo-alt" active={false} onClick={() => {}} />
