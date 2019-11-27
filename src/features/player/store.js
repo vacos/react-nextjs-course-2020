@@ -17,7 +17,7 @@ export default class PlayerStore {
   @observable
   progressBar = {
     timeElapsed: '0:00',
-    progress: 0.2,
+    progress: 0,
     duration: '0:30',
   }
 
