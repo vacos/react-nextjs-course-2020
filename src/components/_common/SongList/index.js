@@ -9,7 +9,7 @@ export default function SongList({ tracks, isQ = false }) {
       width={1}
       css={{ padding: '10px 0', borderRadius: '5px' }}>
       {tracks.map((track, i) => (
-        <SongListItem key={i} track={track} isQ={isQ} />
+        <SongListItem key={i} indexList={i} track={track} isQ={isQ} />
       ))}
     </Flex>
   )

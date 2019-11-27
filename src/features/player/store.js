@@ -15,6 +15,9 @@ export default class PlayerStore {
   nowMusicOnQueue = 0
 
   @observable
+  playAutoInQueue = false
+
+  @observable
   isPlaying = false
 
   @observable
@@ -28,12 +31,20 @@ export default class PlayerStore {
   listsQueue = []
 
   @action
-  play(track, isQ) {
+  play(track, isQ, key) {
+    if (key !== 'undefined' && this.playAutoInQueue === false) {
+      this.playAutoInQueue = false
+    }
+
     if (!isQ) {
       this.listsQueue = []
       this.nowMusicOnQueue = 0
     } else {
-      this.nowMusicOnQueue = this.nowMusicOnQueue + 1
+      if (this.playAutoInQueue) {
+        this.nowMusicOnQueue = this.nowMusicOnQueue + 1
+      } else {
+        this.nowMusicOnQueue = key
+      }
     }
 
     const { previewUrl, name, artist, image, durationMs } = track
@@ -82,9 +93,9 @@ export default class PlayerStore {
   onPlayEnded() {
     const nextPlay = this.nowMusicOnQueue + 1
     const lengthOfList = this.listsQueue.length
-    console.log('nextPlay', nextPlay, 'lengthOfList', lengthOfList)
 
     if (nextPlay < lengthOfList) {
+      this.playAutoInQueue = true
       this.play(this.listsQueue[nextPlay], true)
     } else {
       this.isPlaying = false
