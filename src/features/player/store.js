@@ -36,18 +36,28 @@ export default class PlayerStore {
       this.playAutoInQueue = false
     }
 
+    if (nextPlay === 'undefined' && this.playAutoInQueue === false) {
+      this.playAutoInQueue = true
+    }
+
+    // console.log('playAutoInQueue', this.playAutoInQueue)
+
     if (!isQ) {
       this.listsQueue = []
       this.nowMusicOnQueue = 0
     } else {
       if (this.playAutoInQueue) {
-        this.nowMusicOnQueue = nextPlay
+        if (nextPlay) {
+          this.nowMusicOnQueue = nextPlay
+        } else {
+          this.nowMusicOnQueue = key
+        }
       } else {
         this.nowMusicOnQueue = key
       }
     }
 
-    console.log(this.nowMusicOnQueue)
+    // console.log(key, this.nowMusicOnQueue)
 
     const { previewUrl, name, artist, image, durationMs } = track
 
